@@ -1,6 +1,6 @@
 import argparse 
 import cv2 as cv
-
+from imutils.video import FPS
 
 
 
@@ -34,10 +34,49 @@ cropped_win = "initial selected region"
 
 
 cap = cv.VideoCapture(args.video_file)
-
+fps = None
+initBB = None
 while True:
     r, frame = cap.read()
-    cv.imshow(tracking_win, frame)
+    if frame is None:
+        break
+    
     key = cv.waitKey(1)
     if key & 0xFF == ord('q'):
         break
+
+    if key & 0xFF == ord("s"):
+        initBB = cv.selectROI(tracking_win, frame, fromCenter=False,
+			showCrosshair=True)
+        wanted_tracker.init(frame, initBB)
+        fps = FPS().start()
+    if initBB is not None:
+        success, box = wanted_tracker.update(frame)
+        print(box)
+        if success:
+            (x, y, w, h) = [int(v) for v in box]
+            print(x,y,w,h)
+            cv.rectangle(frame, (x, y), (x + w, y + h),
+				(0, 255, 0), 2)
+ 
+		# update the FPS counter
+        fps.update()
+        fps.stop()
+ 
+		# initialize the set of information we'll be displaying on
+		# the frame
+        info = [
+			("Tracker", wanted_tracker),
+			("Success", "Yes" if success else "No"),
+			("FPS", "{:.2f}".format(fps.fps())),
+		]
+    
+
+		# loop over the info tuples and draw them on our frame
+        for (i, (k, v)) in enumerate(info):
+            text = "{}: {}".format(k, v)
+            cv.putText(frame, text, (10, 10),
+			    cv.FONT_HERSHEY_SIMPLEX, 0.6, (0, 0, 255), 2)
+    cv.imshow(tracking_win, frame)
+
+                
