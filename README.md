@@ -36,11 +36,11 @@ Implementation of object trackers that are provided in OpenCV library
 
 ## Examples
 
-### Single Object Detection
+### Single Object Tracking
 ![](./res/single_output.gif)
 
 
-### Multi Object Detection
+### Multi Object Tracking
 ![](./res/multi_output.gif)
 
 
