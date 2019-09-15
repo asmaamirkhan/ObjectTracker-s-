@@ -6,6 +6,7 @@ import cv2 as cv
 import time
 import os.path
 
+
 def choose_tracker(tracker):
     OPENCV_OBJECT_TRACKERS = {
         "csrt": cv.TrackerCSRT_create,
