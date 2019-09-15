@@ -4,7 +4,7 @@
 import argparse
 import cv2 as cv
 import time
-
+import os.path
 
 def choose_tracker(tracker):
     OPENCV_OBJECT_TRACKERS = {
@@ -91,6 +91,10 @@ if __name__ == "__main__":
                         help='Object tracking algorithm', type=str, default='kcf')
     parser.add_argument(
         '-s', '--save', help='Save output video', type=bool, default=False)
+    #parser.add_argument('','--output_path')
     args = parser.parse_args()
     print(args)
+
+    assert os.path.isfile(args.video_file), 'Invalid input file'
+
     main(args)
