@@ -23,7 +23,7 @@ def init_tracker(tracker):
     return wanted_tracker
 
 
-def track( args):
+def track(args):
     tracking_win = "Object Tracking"
     cropped_win = "Tracked Region"
     cap = cv.VideoCapture(args.video_file)
@@ -45,13 +45,13 @@ def track( args):
             break
 
         success, boxes = trackers.update(frame)
-        
+
         if success:
             for box in boxes:
                 (x, y, w, h) = [int(v) for v in box]
                 cv.rectangle(frame, (x, y), (x + w, y + h),
-                                    (0, 255, 0), 2)    
-        
+                             (0, 255, 0), 2)
+
         key = cv.waitKey(1)
         if key & 0xFF == ord('q'):
             break
@@ -59,7 +59,7 @@ def track( args):
         if key & 0xFF == ord("s"):
             init_box = cv.selectROI(tracking_win, frame, fromCenter=False,
                                     showCrosshair=True)
-            
+
             tracker1 = init_tracker(args.tracker)
             trackers.add(tracker1, frame, init_box)
 
@@ -73,7 +73,6 @@ def track( args):
             output.write(frame)
 
 
-
 if __name__ == "__main__":
     tracking_methods = ["csrt", "kcf", "boosting", "mil",
                         "tld", "medianflow", "mosse"]
@@ -81,7 +80,7 @@ if __name__ == "__main__":
     parser.add_argument('-v', '--video_file',
                         help='Path to your video file', type=str, required=True)
     parser.add_argument('-t', '--tracker',
-                        help='Object tracking algorithm', type=str, default='kcf')
+                        help='Object tracking algorithm, available trackers: csrt, kcf, boosting, mil, tld, medianflow, mosse', type=str, default='kcf')
     parser.add_argument('-o', '--output_path',
                         help='Output file path', type=str)
     args = parser.parse_args()

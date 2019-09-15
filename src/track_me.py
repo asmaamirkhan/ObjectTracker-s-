@@ -90,7 +90,7 @@ if __name__ == "__main__":
     parser.add_argument('-v', '--video_file',
                         help='Path to your video file', type=str, required=True)
     parser.add_argument('-t', '--tracker',
-                        help='Object tracking algorithm', type=str, default='kcf')
+                        help='Object tracking algorithm, available trackers: csrt, kcf, boosting, mil, tld, medianflow, mosse', type=str, default='kcf')
     parser.add_argument('-o', '--output_path',
                         help='Output file path', type=str)
     args = parser.parse_args()
