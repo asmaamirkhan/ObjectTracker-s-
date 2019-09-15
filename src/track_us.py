@@ -44,6 +44,14 @@ def track( args):
         if frame is None:
             break
 
+        success, boxes = trackers.update(frame)
+        
+        if success:
+            for box in boxes:
+                (x, y, w, h) = [int(v) for v in box]
+                cv.rectangle(frame, (x, y), (x + w, y + h),
+                                    (0, 255, 0), 2)    
+        
         key = cv.waitKey(1)
         if key & 0xFF == ord('q'):
             break
@@ -51,17 +59,9 @@ def track( args):
         if key & 0xFF == ord("s"):
             init_box = cv.selectROI(tracking_win, frame, fromCenter=False,
                                     showCrosshair=True)
-            tracker = init_tracker(args.tracker)
-            trackers.add(tracker, frame, init_box)
-
-        if init_box is not None:
-            success, boxes = trackers.update(frame)
-
-            if success:
-                for box in boxes:
-                    (x, y, w, h) = [int(v) for v in box]
-                    cv.rectangle(frame, (x, y), (x + w, y + h),
-                                 (0, 255, 0), 2)
+            
+            tracker1 = init_tracker(args.tracker)
+            trackers.add(tracker1, frame, init_box)
 
         cv.putText(frame, 'Tracker: {}, Frame: {}'.format(args.tracker, frame_counter), (30, 30),
                    cv.FONT_HERSHEY_COMPLEX, 0.5, (255, 0, 255), 1)
