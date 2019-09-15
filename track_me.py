@@ -1,34 +1,43 @@
+# author: Asmaa Mirkhan ~ 2019
+
+
 import argparse
 import cv2 as cv
+import time
+
 
 def choose_tracker(tracker):
     OPENCV_OBJECT_TRACKERS = {
-    "csrt": cv.TrackerCSRT_create,
-    "kcf": cv.TrackerKCF_create,
-    "boosting": cv.TrackerBoosting_create,
-    "mil": cv.TrackerMIL_create,
-    "tld": cv.TrackerTLD_create,
-    "medianflow": cv.TrackerMedianFlow_create,
-    "mosse": cv.TrackerMOSSE_create
+        "csrt": cv.TrackerCSRT_create,
+        "kcf": cv.TrackerKCF_create,
+        "boosting": cv.TrackerBoosting_create,
+        "mil": cv.TrackerMIL_create,
+        "tld": cv.TrackerTLD_create,
+        "medianflow": cv.TrackerMedianFlow_create,
+        "mosse": cv.TrackerMOSSE_create
     }
 
     if tracker not in OPENCV_OBJECT_TRACKERS:
         wanted_tracker = OPENCV_OBJECT_TRACKERS['kcf']()
+        tracker = 'kcf'
         print('Invalid tracker, kcf used instead')
     else:
         wanted_tracker = OPENCV_OBJECT_TRACKERS[tracker]()
-    return wanted_tracker
+
+    return wanted_tracker, tracker
+
 
 def track(wanted_tracker, video_file, tracker):
-    tracking_win = "Kalman Object Tracking"
+    tracking_win = "Object Tracking"
     cropped_win = "Tracked Region"
     cap = cv.VideoCapture(video_file)
     frame_counter = 0
     init_box = None
+    fps = 0
+
     while True:
         r, frame = cap.read()
 
-        frame = cv.resize(frame, (700, 700))
         frame_counter += 1
 
         if frame is None:
@@ -43,25 +52,31 @@ def track(wanted_tracker, video_file, tracker):
                                     showCrosshair=True)
             wanted_tracker.init(frame, init_box)
 
+        start = time.clock()
+        frame = cv.resize(frame, (700, 700))
         if init_box is not None:
             success, box = wanted_tracker.update(frame)
 
             if success:
                 (x, y, w, h) = [int(v) for v in box]
                 cv.rectangle(frame, (x, y), (x + w, y + h),
-                            (0, 255, 0), 2)
+                             (0, 255, 0), 2)
                 crop = frame[y:y+h, x:x+w]
                 cv.imshow(cropped_win, crop)
             else:
                 cv.destroyWindow(cropped_win)
-            cv.putText(frame, 'Tracker: {}'.format(tracker), (30, 30),
-                    cv.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 255), 1)
-
+        end = time.clock()
+        print('Frame: {} , Elapsed time: {:.3f}'.format(frame_counter, end-start))
+        print('=========================================')
+        cv.putText(frame, 'Tracker: {}, Frame: {}, FPS: {}'.format(tracker, frame_counter, fps), (30, 30),
+                   cv.FONT_HERSHEY_COMPLEX, 0.5, (255, 0, 255), 1)
         cv.imshow(tracking_win, frame)
 
+
 def main(args):
-    wanted_tracker = choose_tracker(args.tracker)
+    wanted_tracker, args.tracker = choose_tracker(args.tracker)
     track(wanted_tracker, args.video_file, args.tracker)
+
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='Object tracking parameters')
@@ -69,5 +84,8 @@ if __name__ == "__main__":
                         help='Path to your video file', type=str)
     parser.add_argument('-t', '--tracker',
                         help='Object tracking algorithm', type=str, default='kcf')
+    parser.add_argument(
+        '-s', '--save', help='Save output video', type=bool, default=False)
     args = parser.parse_args()
+    print(args)
     main(args)
