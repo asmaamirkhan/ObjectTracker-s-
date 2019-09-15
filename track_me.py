@@ -6,7 +6,6 @@ import cv2 as cv
 import time
 import os.path
 
-
 def choose_tracker(tracker):
     OPENCV_OBJECT_TRACKERS = {
         "csrt": cv.TrackerCSRT_create,
@@ -96,7 +95,8 @@ if __name__ == "__main__":
                         help='Output file path', type=str)
     args = parser.parse_args()
     assert os.path.isfile(args.video_file), 'Invalid input file'
-    assert os.path.isdir(os.path.dirname(
-        args.output_path)), 'No such directory'
+    if args.output_path:
+        assert os.path.isdir(os.path.dirname(
+            args.output_path)), 'No such directory'
 
     main(args)
