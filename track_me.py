@@ -27,18 +27,22 @@ def choose_tracker(tracker):
     return wanted_tracker, tracker
 
 
-def track(wanted_tracker, video_file, tracker):
+def track(wanted_tracker, video_file, tracker, save):
     tracking_win = "Object Tracking"
     cropped_win = "Tracked Region"
     cap = cv.VideoCapture(video_file)
+    if save:
+        fourcc = cv.VideoWriter_fourcc(*'MP4V')
+        output = cv.VideoWriter('output.mp4', fourcc, 20.0, (700,700))
     frame_counter = 0
     init_box = None
-    fps = 0
 
     while True:
         r, frame = cap.read()
 
         frame_counter += 1
+        start = time.clock()
+        frame = cv.resize(frame, (700, 700))
 
         if frame is None:
             break
@@ -52,8 +56,7 @@ def track(wanted_tracker, video_file, tracker):
                                     showCrosshair=True)
             wanted_tracker.init(frame, init_box)
 
-        start = time.clock()
-        frame = cv.resize(frame, (700, 700))
+        
         if init_box is not None:
             success, box = wanted_tracker.update(frame)
 
@@ -68,14 +71,16 @@ def track(wanted_tracker, video_file, tracker):
         end = time.clock()
         print('Frame: {} , Elapsed time: {:.3f}'.format(frame_counter, end-start))
         print('=========================================')
-        cv.putText(frame, 'Tracker: {}, Frame: {}, FPS: {}'.format(tracker, frame_counter, fps), (30, 30),
+        cv.putText(frame, 'Tracker: {}, Frame: {}'.format(tracker, frame_counter), (30, 30),
                    cv.FONT_HERSHEY_COMPLEX, 0.5, (255, 0, 255), 1)
         cv.imshow(tracking_win, frame)
+        if save:
+            output.write(frame)
 
 
 def main(args):
     wanted_tracker, args.tracker = choose_tracker(args.tracker)
-    track(wanted_tracker, args.video_file, args.tracker)
+    track(wanted_tracker, args.video_file, args.tracker, save = args.save)
 
 
 if __name__ == "__main__":
