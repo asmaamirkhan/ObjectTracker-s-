@@ -16,6 +16,9 @@ Implementation of object trackers that are provided in OpenCV library
 * MEDIANFLOW
 * MOSSE
 
+## Attention 🚧
+These algorithms aren't powerful enough, for better tracking algorithms look at [SORT](https://github.com/abewley/sort) algorithm and [DEEP-SORT ✨](https://github.com/nwojke/deep_sort) algorithm.
+
 ## Usage
 0. Clone this repo
 0. Open [src](/src) folder in CMD
