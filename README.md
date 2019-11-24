@@ -51,4 +51,4 @@ These algorithms aren't powerful enough, for better tracking algorithms look at 
 [Object Tracking in OpenCV](https://ehsangazar.com/object-tracking-with-opencv-fd18ccdd7369)
 
 ## For Contact or Support
-Find me on [LinkedIn](https://www.linkedin.com/in/asmaa-mirkhan/) and feel free to mail me, [Asmaa](mailto:asmaamirkhan.am@gmail.com) 😄
+Find me on [LinkedIn](https://www.linkedin.com/in/asmaamirkhan/) and feel free to mail me, [Asmaa](mailto:asmaamirkhan.am@gmail.com) 🦋
