@@ -1,13 +1,13 @@
-# Object Trackers
+# 🛰 Object Trackers
 Implementation of object trackers that are provided in OpenCV library
 
-## Available Codes
+## 🎈 Available Codes
 0. [Single Object Tracker](/src/track_me.py)
 0. [Multiple Object Tracker](/src/track_us.py)
  
 > Make sure that you have OpenCV already installed
 
-## Available Trackers
+## 🌞 Available Trackers
 * CSRT
 * KCF
 * BOOSTING
@@ -16,10 +16,10 @@ Implementation of object trackers that are provided in OpenCV library
 * MEDIANFLOW
 * MOSSE
 
-## Attention 🚧
+## 🚧 Attention 
 These algorithms aren't powerful enough, for better tracking algorithms look at [SORT](https://github.com/abewley/sort) algorithm and [DEEP-SORT ✨](https://github.com/nwojke/deep_sort) algorithm.
 
-## Usage
+## ⚙ 🔩 Usage
 0. Clone this repo
 0. Open [src](/src) folder in CMD
 0. Write:
@@ -37,18 +37,18 @@ These algorithms aren't powerful enough, for better tracking algorithms look at 
 
 > Repeat **3** for each object in multiple object tracking
 
-## Examples
+## 👀 Examples
 
-### Single Object Tracking
+### 1️⃣ Single Object Tracking
 ![](./res/single_output.gif)
 
 
-### Multi Object Tracking
+### 2️⃣ Multi Object Tracking
 ![](./res/multi_output.gif)
 
 
-## Tracking Explanation
+## 👩‍🏫 Tracking Explanation
 [Object Tracking in OpenCV](https://ehsangazar.com/object-tracking-with-opencv-fd18ccdd7369)
 
-## For Contact or Support
+## 💼 For Contact or Support
 Find me on [LinkedIn](https://www.linkedin.com/in/asmaamirkhan/) and feel free to mail me, [Asmaa](mailto:asmaamirkhan.am@gmail.com) 🦋
