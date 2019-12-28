@@ -35,7 +35,7 @@ These algorithms aren't powerful enough, for better tracking algorithms look at 
 0. See your object while it is being tracked 🤗
 0. Press <kbd>Q</kbd> to exit  
 
-> Repeat **3** for each object in multiple object tracking
+> Repeat **4** for each object in multiple object tracking
 
 ## 👀 Examples
 
