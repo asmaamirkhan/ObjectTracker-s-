@@ -1,3 +1,6 @@
+import tensorflow as tf
+import time 
+
 class DetectorAPI:
     def __init__(self, path_to_ckpt):
         self.path_to_ckpt = path_to_ckpt
@@ -28,7 +31,7 @@ class DetectorAPI:
         self.num_detections = self.detection_graph.get_tensor_by_name(
             'num_detections:0')
 
-    def processFrame(self, image):
+    def processFrame(self, image, debug_time=False):
         # Expand dimensions since the trained_model expects images to have shape: [1, None, None, 3]
         image_np_expanded = np.expand_dims(image, axis=0)
         # Actual detection.
@@ -38,8 +41,8 @@ class DetectorAPI:
                 self.detection_classes, self.num_detections],
             feed_dict={self.image_tensor: image_np_expanded})
         end_time = time.time()
-
-        print("Elapsed Time:", end_time-start_time)
+        if debug_time is False:
+            print("Elapsed Time:", end_time-start_time)
 
         im_height, im_width, _ = image.shape
         boxes_list = [None for i in range(boxes.shape[1])]
