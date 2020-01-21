@@ -50,10 +50,8 @@ class DetectorAPI:
 
         im_height, im_width, _ = image.shape
         boxes_list = [None for i in range(boxes.shape[1])]
-        real_objects = 0
+        real_objects = int(num[0])
         for i in range(boxes.shape[1]):
-            if int(boxes[0, i, 0] * im_height) != 0:
-                real_objects += 1
             boxes_list[i] = (int(boxes[0, i, 0] * im_height),
                              int(boxes[0, i, 1] * im_width),
                              int(boxes[0, i, 2] * im_height),
