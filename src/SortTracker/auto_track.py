@@ -10,21 +10,33 @@ WINDOW_TITLE = 'Tracker'
 def main(args):
     detector = DetectorAPI(args.model_path)
     cap = cv.VideoCapture(args.video_file)
-
+    tracker = Sort()
     while True:
         check, frame = cap.read()
-        
+        sort_tracking_params = []
 
         boxes, scores, classes, number = detector.processFrame(frame,
                                                                debug_time=True)
 
-        for index, box in enumerate(boxes):
-            if scores[index] > args.threshold: 
-                cv.rectangle(frame, (box[1], box[0]), (box[3], box[2]),
-                            (255, 255, 255),
-                            thickness=2)
+        for i, box in enumerate(boxes):
+            sort_tracking_params.append(
+                [box[0], box[1], box[2], box[3], scores[i]])
         
+        sort_tracking_params = np.array(sort_tracking_params)
+        trackers = tracker.update(sort_tracking_params).astype(np.int32)
+        
+        for index, box in enumerate(trackers):
+            if scores[index] > args.threshold:
+                cv.rectangle(frame, (box[1], box[0]), (box[3], box[2]),
+                             (255, 255, 255),
+                             thickness=2)
+                cv.putText(frame,
+                           'id: {}'.format(box[4]), (box[1], box[0]),
+                           cv.FONT_HERSHEY_PLAIN, 1,(255, 255, 255),
+                           thickness=2)
+
         cv.imshow(WINDOW_TITLE, frame)
+        
         # the end of the video?
         if not check:
             break
