@@ -1,5 +1,7 @@
 import tensorflow as tf
-import time 
+import numpy as np
+import time
+
 
 class DetectorAPI:
     def __init__(self, path_to_ckpt):
@@ -36,23 +38,30 @@ class DetectorAPI:
         image_np_expanded = np.expand_dims(image, axis=0)
         # Actual detection.
         start_time = time.time()
-        (boxes, scores, classes, num) = self.sess.run(
-            [self.detection_boxes, self.detection_scores,
-                self.detection_classes, self.num_detections],
-            feed_dict={self.image_tensor: image_np_expanded})
+        (boxes, scores, classes,
+         num) = self.sess.run([
+             self.detection_boxes, self.detection_scores,
+             self.detection_classes, self.num_detections
+         ],
+                              feed_dict={self.image_tensor: image_np_expanded})
         end_time = time.time()
-        if debug_time is False:
-            print("Elapsed Time:", end_time-start_time)
+        if debug_time:
+            print("Elapsed Time:", end_time - start_time)
 
         im_height, im_width, _ = image.shape
         boxes_list = [None for i in range(boxes.shape[1])]
+        real_objects = 0
         for i in range(boxes.shape[1]):
+            if int(boxes[0, i, 0] * im_height) != 0:
+                real_objects += 1
             boxes_list[i] = (int(boxes[0, i, 0] * im_height),
-                             int(boxes[0, i, 1]*im_width),
+                             int(boxes[0, i, 1] * im_width),
                              int(boxes[0, i, 2] * im_height),
-                             int(boxes[0, i, 3]*im_width))
-
-        return boxes_list, scores[0].tolist(), [int(x) for x in classes[0].tolist()], int(num[0])
+                             int(boxes[0, i, 3] * im_width))
+                             
+        classes = [int(x) for x in classes[0].tolist()]
+        return boxes_list[:real_objects], scores[0].tolist(
+        )[:real_objects], classes[:real_objects], int(num[0])
 
     def close(self):
         self.sess.close()
