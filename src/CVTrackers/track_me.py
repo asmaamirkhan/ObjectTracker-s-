@@ -75,8 +75,8 @@ def track(wanted_tracker, args):
                    cv.FONT_HERSHEY_COMPLEX, 0.5, (255, 0, 255), 1)
         cv.imshow(tracking_win, frame)
         end = time.clock()
-        #print('Frame: {} , Elapsed time: {:.3f}'.format(frame_counter, end-start))
-        # print('=========================================')
+        print('Frame: {} , Elapsed time: {:.3f}'.format(frame_counter, end-start))
+        print('=========================================')
         if args.output_path:
             output.write(frame)
 
