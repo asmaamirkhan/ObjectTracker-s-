@@ -1,20 +1,23 @@
 import os
+import argparse
+import cv2 as cv
 from sort.sort import *
 from detection_utils.DetectorAPI import DetectorAPI
 from detection_utils.ms_coco_classnames import MS_CLASSES
-import cv2 as cv
-import argparse
 
 WINDOW_TITLE = 'Tracker'
-
 
 def clean_result(result, number):
     return result[:number]
 
-
 def main(args):
     detector = DetectorAPI(args.model_path)
     cap = cv.VideoCapture(args.video_file)
+
+    if args.output_path:
+        fourcc = cv.VideoWriter_fourcc(*'MP4V')
+        output = cv.VideoWriter(args.output_path, fourcc, 20.0, (int(cap.get(3)), int(cap.get(4))))
+
     tracker = Sort()
     while True:
         check, frame = cap.read()
@@ -48,6 +51,8 @@ def main(args):
                            thickness=2)
 
         cv.imshow(WINDOW_TITLE, frame)
+        if args.output_path:
+            output.write(frame)
 
         # the end of the video?
         if not check:
