@@ -26,6 +26,7 @@ def adapt_to_deep_sort(boxes):
         box[2], box[3] = box[3], box[2]
     return boxes
 
+
 def main(args):
     # setting deep sort parameters
     tracker = Tracker(METRIC)
@@ -40,7 +41,7 @@ def main(args):
     # create output file
     if args.output_path:
         fourcc = cv.VideoWriter_fourcc(*'MP4V')
-        # cap.get(3) = widht, cap.get(4) height
+        # cap.get(3) = width, cap.get(4) height
         output = cv.VideoWriter(args.output_path, fourcc, 20.0,
                                 (int(cap.get(3)), int(cap.get(4))))
 
@@ -55,7 +56,7 @@ def main(args):
         # boxes are in (x_top_left, y_top_left, x_bottom_right, y_bottom_right) format
         boxes, scores, classes, number = detector.processFrame(frame,
                                                                debug_time=True)
-        
+
         # filter boxes due to threshold
         boxes = [
             boxes[i] for i in range(0, number) if scores[i] > args.threshold

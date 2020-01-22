@@ -13,26 +13,37 @@ def clean_result(result, number):
 
 
 def main(args):
+    # Initialize the object detector
     detector = DetectorAPI(args.model_path)
+    # open the video
     cap = cv.VideoCapture(args.video_file)
 
+    # create output file
     if args.output_path:
         fourcc = cv.VideoWriter_fourcc(*'MP4V')
+        # cap.get(3) = width, cap.get(4) height
         output = cv.VideoWriter(args.output_path, fourcc, 20.0,
                                 (int(cap.get(3)), int(cap.get(4))))
 
+    # initialize tracker
     tracker = Sort()
+
+    # read frame by frame
     while True:
         check, frame = cap.read()
         sort_tracking_params = []
 
+        # do real detection
+        # boxes are in (x_top_left, y_top_left, x_bottom_right, y_bottom_right) format
         boxes, scores, classes, number = detector.processFrame(frame,
                                                                debug_time=True)
 
+        # keep only valid results
         boxes = clean_result(boxes, number)
         scores = clean_result(scores, number)
         classes = clean_result(classes, number)
 
+        # prepare tracking parameters, list of [x1,y1,x2,y2,score]
         for i, box in enumerate(boxes):
             sort_tracking_params.append(
                 [box[0], box[1], box[2], box[3], scores[i]])
@@ -40,6 +51,7 @@ def main(args):
         sort_tracking_params = np.array(sort_tracking_params)
         trackers = tracker.update(sort_tracking_params).astype(np.int32)
 
+        # draw boxes due to tracking results
         for index, box in enumerate(trackers):
             if scores[index] > args.threshold:
                 cv.rectangle(frame, (box[1], box[0]), (box[3], box[2]),
@@ -54,6 +66,8 @@ def main(args):
                            thickness=2)
 
         cv.imshow(WINDOW_TITLE, frame)
+
+        # save frames to specified path
         if args.output_path:
             output.write(frame)
 
