@@ -1,6 +1,6 @@
 import os
 from sort.sort import *
-from DetectorAPI import DetectorAPI
+from detection_utils.DetectorAPI import DetectorAPI
 import cv2 as cv
 import argparse
 

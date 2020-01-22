@@ -1,5 +1,5 @@
 import os
-from DetectorAPI import DetectorAPI
+from detection_utils.DetectorAPI import DetectorAPI
 import cv2 as cv
 import argparse
 from deep_sort import preprocessing
