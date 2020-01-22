@@ -9,11 +9,19 @@ from deep_sort.tracker import Tracker
 from deep_sort.detection import Detection as ddet
 from deep_sort.tools import generate_detections as gdet
 
-
 WINDOW_TITLE = 'Tracker'
+
+MAX_COSINE_DISTANCE = 0.3
+NN_BUDGET = None
+NMS_MAX_OVERLAP = 1.0
+METRIC = nn_matching.NearestNeighborDistanceMetric("cosine",
+                                                   MAX_COSINE_DISTANCE,
+                                                   NN_BUDGET)
 
 
 def main(args):
+    tracker = Tracker(METRIC)
+    encoder = gdet.create_box_encoder(args.tracker, batch_size=1)
     detector = DetectorAPI(args.model_path)
     cap = cv.VideoCapture(args.video_file)
     while True:
@@ -22,12 +30,28 @@ def main(args):
 
         boxes, scores, classes, number = detector.processFrame(frame,
                                                                debug_time=True)
+        boxes = [boxes[i] for i in range(0, number) if scores[i] > args.threshold]
 
-        for index, box in enumerate(boxes):
-            if scores[index] > args.threshold:
-                cv.rectangle(frame, (box[1], box[0]), (box[3], box[2]),
-                             (255, 255, 255),
-                             thickness=2)
+        for box in boxes:
+            box = list(box)
+            box[0], box[1] = box[1], box[0]
+            box[2], box[3] = box[3], box[2]
+
+        features = encoder(frame, boxes)
+        detections = [
+            Detection(bbox, 1.0, feature)
+            for bbox, feature in zip(boxes, features)
+        ]
+        tracker.predict()
+        tracker.update(detections)
+
+        for track in tracker.tracks:
+            if not track.is_confirmed() or track.time_since_update > 1:
+                continue
+            bbox = track.to_tlbr()
+            cv.rectangle(frame, (int(bbox[1]), int(bbox[0])),
+                         (int(bbox[3]), int(bbox[2])), (255, 255, 255),
+                         thickness=2)
 
         cv.imshow(WINDOW_TITLE, frame)
 
