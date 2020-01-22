@@ -24,13 +24,16 @@ def main(args):
     encoder = gdet.create_box_encoder(args.tracker, batch_size=1)
     detector = DetectorAPI(args.model_path)
     cap = cv.VideoCapture(args.video_file)
+
     while True:
         check, frame = cap.read()
         sort_tracking_params = []
 
         boxes, scores, classes, number = detector.processFrame(frame,
                                                                debug_time=True)
-        boxes = [boxes[i] for i in range(0, number) if scores[i] > args.threshold]
+        boxes = [
+            boxes[i] for i in range(0, number) if scores[i] > args.threshold
+        ]
 
         for box in boxes:
             box = list(box)
@@ -39,8 +42,8 @@ def main(args):
 
         features = encoder(frame, boxes)
         detections = [
-            Detection(bbox, 1.0, feature)
-            for bbox, feature in zip(boxes, features)
+            Detection(tbox, 1.0, feature)
+            for tbox, feature in zip(boxes, features)
         ]
         tracker.predict()
         tracker.update(detections)
@@ -48,10 +51,16 @@ def main(args):
         for track in tracker.tracks:
             if not track.is_confirmed() or track.time_since_update > 1:
                 continue
-            bbox = track.to_tlbr()
-            cv.rectangle(frame, (int(bbox[1]), int(bbox[0])),
-                         (int(bbox[3]), int(bbox[2])), (255, 255, 255),
+            tbox = track.to_tlbr()
+            cv.rectangle(frame, (int(tbox[1]), int(tbox[0])),
+                         (int(tbox[3]), int(tbox[2])), (255, 255, 255),
                          thickness=2)
+            cv.putText(frame,
+                       'id: {}'.format(track.track_id),
+                       (int(tbox[1]), int(tbox[0])),
+                       cv.FONT_HERSHEY_PLAIN,
+                       1, (255, 255, 255),
+                       thickness=2)
 
         cv.imshow(WINDOW_TITLE, frame)
 
