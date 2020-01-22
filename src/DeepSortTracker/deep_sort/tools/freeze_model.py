@@ -6,13 +6,13 @@ import tensorflow.contrib.slim as slim
 
 def _batch_norm_fn(x, scope=None):
     if scope is None:
-        scope = tf.get_variable_scope().name + "/bn"
+        scope = tf.compat.v1.get_variable_scope().name + "/bn"
     return slim.batch_norm(x, scope=scope)
 
 
 def create_link(
         incoming, network_builder, scope, nonlinearity=tf.nn.elu,
-        weights_initializer=tf.truncated_normal_initializer(stddev=1e-3),
+        weights_initializer=tf.compat.v1.truncated_normal_initializer(stddev=1e-3),
         regularizer=None, is_first=False, summarize_activations=True):
     if is_first:
         network = incoming
@@ -20,7 +20,7 @@ def create_link(
         network = _batch_norm_fn(incoming, scope=scope + "/bn")
         network = nonlinearity(network)
         if summarize_activations:
-            tf.summary.histogram(scope+"/activations", network)
+            tf.compat.v1.summary.histogram(scope+"/activations", network)
 
     pre_block_network = network
     post_block_network = network_builder(pre_block_network, scope)
@@ -42,8 +42,8 @@ def create_link(
 
 def create_inner_block(
         incoming, scope, nonlinearity=tf.nn.elu,
-        weights_initializer=tf.truncated_normal_initializer(1e-3),
-        bias_initializer=tf.zeros_initializer(), regularizer=None,
+        weights_initializer=tf.compat.v1.truncated_normal_initializer(1e-3),
+        bias_initializer=tf.compat.v1.zeros_initializer(), regularizer=None,
         increase_dim=False, summarize_activations=True):
     n = incoming.get_shape().as_list()[-1]
     stride = 1
@@ -57,7 +57,7 @@ def create_inner_block(
         biases_initializer=bias_initializer, weights_regularizer=regularizer,
         scope=scope + "/1")
     if summarize_activations:
-        tf.summary.histogram(incoming.name + "/activations", incoming)
+        tf.compat.v1.summary.histogram(incoming.name + "/activations", incoming)
 
     incoming = slim.dropout(incoming, keep_prob=0.6)
 
@@ -70,8 +70,8 @@ def create_inner_block(
 
 
 def residual_block(incoming, scope, nonlinearity=tf.nn.elu,
-                   weights_initializer=tf.truncated_normal_initializer(1e3),
-                   bias_initializer=tf.zeros_initializer(), regularizer=None,
+                   weights_initializer=tf.compat.v1.truncated_normal_initializer(1e3),
+                   bias_initializer=tf.compat.v1.zeros_initializer(), regularizer=None,
                    increase_dim=False, is_first=False,
                    summarize_activations=True):
 
@@ -87,15 +87,15 @@ def residual_block(incoming, scope, nonlinearity=tf.nn.elu,
 
 def _create_network(incoming, reuse=None, weight_decay=1e-8):
     nonlinearity = tf.nn.elu
-    conv_weight_init = tf.truncated_normal_initializer(stddev=1e-3)
-    conv_bias_init = tf.zeros_initializer()
-    conv_regularizer = slim.l2_regularizer(weight_decay)
-    fc_weight_init = tf.truncated_normal_initializer(stddev=1e-3)
-    fc_bias_init = tf.zeros_initializer()
-    fc_regularizer = slim.l2_regularizer(weight_decay)
+    conv_weight_init = tf.compat.v1.truncated_normal_initializer(stddev=1e-3)
+    conv_bias_init = tf.compat.v1.zeros_initializer()
+    conv_regularizer = tf.keras.regularizers.l2(0.5 * (weight_decay))
+    fc_weight_init = tf.compat.v1.truncated_normal_initializer(stddev=1e-3)
+    fc_bias_init = tf.compat.v1.zeros_initializer()
+    fc_regularizer = tf.keras.regularizers.l2(0.5 * (weight_decay))
 
     def batch_norm_fn(x):
-        return slim.batch_norm(x, scope=tf.get_variable_scope().name + "/bn")
+        return slim.batch_norm(x, scope=tf.compat.v1.get_variable_scope().name + "/bn")
 
     network = incoming
     network = slim.conv2d(
@@ -152,7 +152,7 @@ def _create_network(incoming, reuse=None, weight_decay=1e-8):
     features = slim.batch_norm(features, scope="ball", reuse=reuse)
     feature_norm = tf.sqrt(
         tf.constant(1e-8, tf.float32) +
-        tf.reduce_sum(tf.square(features), [1], keepdims=True))
+        tf.reduce_sum(input_tensor=tf.square(features), axis=[1], keepdims=True))
     features = features / feature_norm
     return features, None
 
@@ -194,8 +194,8 @@ def parse_args():
 def main():
     args = parse_args()
 
-    with tf.Session(graph=tf.Graph()) as session:
-        input_var = tf.placeholder(
+    with tf.compat.v1.Session(graph=tf.Graph()) as session:
+        input_var = tf.compat.v1.placeholder(
             tf.uint8, (None, 128, 64, 3), name="images")
         image_var = tf.map_fn(
             lambda x: _preprocess(x), tf.cast(input_var, tf.float32),
@@ -205,13 +205,13 @@ def main():
         features, _ = factory_fn(image_var, reuse=None)
         features = tf.identity(features, name="features")
 
-        saver = tf.train.Saver(slim.get_variables_to_restore())
+        saver = tf.compat.v1.train.Saver(slim.get_variables_to_restore())
         saver.restore(session, args.checkpoint_in)
 
-        output_graph_def = tf.graph_util.convert_variables_to_constants(
-            session, tf.get_default_graph().as_graph_def(),
+        output_graph_def = tf.compat.v1.graph_util.convert_variables_to_constants(
+            session, tf.compat.v1.get_default_graph().as_graph_def(),
             [features.name.split(":")[0]])
-        with tf.gfile.GFile(args.graphdef_out, "wb") as file_handle:
+        with tf.io.gfile.GFile(args.graphdef_out, "wb") as file_handle:
             file_handle.write(output_graph_def.SerializeToString())
 
 
