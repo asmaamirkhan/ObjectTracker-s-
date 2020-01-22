@@ -1,7 +1,7 @@
 import os
-from detection_utils.DetectorAPI import DetectorAPI
 import cv2 as cv
 import argparse
+from detection_utils.DetectorAPI import DetectorAPI
 from deep_sort import preprocessing
 from deep_sort import nn_matching
 from deep_sort.detection import Detection
@@ -24,6 +24,11 @@ def main(args):
     encoder = gdet.create_box_encoder(args.tracker, batch_size=1)
     detector = DetectorAPI(args.model_path)
     cap = cv.VideoCapture(args.video_file)
+
+    if args.output_path:
+        fourcc = cv.VideoWriter_fourcc(*'MP4V')
+        output = cv.VideoWriter(args.output_path, fourcc, 20.0,
+                                (int(cap.get(3)), int(cap.get(4))))
 
     while True:
         check, frame = cap.read()
@@ -63,6 +68,9 @@ def main(args):
                        thickness=2)
 
         cv.imshow(WINDOW_TITLE, frame)
+
+        if args.output_path:
+            output.write(frame)
 
         # the end of the video?
         if not check:

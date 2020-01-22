@@ -7,8 +7,10 @@ from detection_utils.ms_coco_classnames import MS_CLASSES
 
 WINDOW_TITLE = 'Tracker'
 
+
 def clean_result(result, number):
     return result[:number]
+
 
 def main(args):
     detector = DetectorAPI(args.model_path)
@@ -16,7 +18,8 @@ def main(args):
 
     if args.output_path:
         fourcc = cv.VideoWriter_fourcc(*'MP4V')
-        output = cv.VideoWriter(args.output_path, fourcc, 20.0, (int(cap.get(3)), int(cap.get(4))))
+        output = cv.VideoWriter(args.output_path, fourcc, 20.0,
+                                (int(cap.get(3)), int(cap.get(4))))
 
     tracker = Sort()
     while True:
