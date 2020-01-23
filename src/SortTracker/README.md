@@ -1,4 +1,4 @@
-# 🌊 Deep Sort Tracker
+# 🐾 Sort Tracker
 Implementation of Deep Sort Tracking with Tensorflow object detection
 
 ## 🎈 Available Codes
