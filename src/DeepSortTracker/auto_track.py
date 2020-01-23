@@ -19,14 +19,6 @@ METRIC = nn_matching.NearestNeighborDistanceMetric("cosine",
                                                    NN_BUDGET)
 
 
-def adapt_to_deep_sort(boxes):
-    for box in boxes:
-        box = list(box)
-        box[0], box[1] = box[1], box[0]
-        box[2], box[3] = box[3], box[2]
-    return boxes
-
-
 def main(args):
     # setting deep sort parameters
     tracker = Tracker(METRIC)
@@ -66,7 +58,6 @@ def main(args):
         ]
 
         # do tracking
-        boxes = adapt_to_deep_sort(boxes)
         features = encoder(frame, boxes)
         detections = [
             Detection(tbox, 1.0, feature)
@@ -79,7 +70,7 @@ def main(args):
         for track in tracker.tracks:
             if not track.is_confirmed() or track.time_since_update > 1:
                 continue
-            tbox = track.to_tlbr()
+            tbox = track.to_tlwh()
             cv.rectangle(frame, (int(tbox[1]), int(tbox[0])),
                          (int(tbox[3]), int(tbox[2])), (255, 255, 255),
                          thickness=2)
