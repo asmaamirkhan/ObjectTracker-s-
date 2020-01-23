@@ -31,6 +31,9 @@ def main(args):
     # read frame by frame
     while True:
         check, frame = cap.read()
+        # the end of the video?
+        if not check:
+            break
         sort_tracking_params = []
 
         # do real detection
@@ -71,9 +74,6 @@ def main(args):
         if args.output_path:
             output.write(frame)
 
-        # the end of the video?
-        if not check:
-            break
         key = cv.waitKey(1)
         if key & 0xFF == ord('q'):
             break

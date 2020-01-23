@@ -48,6 +48,9 @@ def main(args):
     # read the video frame by frame
     while True:
         check, frame = cap.read()
+        # the end of the video?
+        if not check:
+            break
 
         # initialize tracking parameters
         sort_tracking_params = []
@@ -93,9 +96,7 @@ def main(args):
         if args.output_path:
             output.write(frame)
 
-        # the end of the video?
-        if not check:
-            break
+       
         key = cv.waitKey(1)
         if key & 0xFF == ord('q'):
             break
