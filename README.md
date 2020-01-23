@@ -4,33 +4,22 @@ Implementation of various methods of object tracking
 
 
 ## 👩‍💻 Available Methods
-- [x] 👶 OpenCV Trackers
-- [x] 🐣 Sort Tracking
-- [ ] 🐥 Deep Sort Tracking 
-
-## 🎈 Available Codes
-0. [Single Object Tracker](/src/track_me.py)
-0. [Multiple Object Tracker](/src/track_us.py)
+- 🛰 [OpenCV Trackers](./src/CVTrackers)
+- 🐾 [Sort Tracking](./src/SortTracking)
+- 🌊 [Deep Sort Tracking](./src/DeepSortTracking)
  
-> Make sure that you have OpenCV already installed
+> Each folder contains its running details 👩‍🏫
 
-## 🌞 Available Trackers
-* CSRT
-* KCF
-* BOOSTING
-* MIL
-* TLD
-* MEDIANFLOW
-* MOSSE
+## 👀 Examples
+### 🛰 CVTrackers
+- ![](./res/single_output.gif)
+- ![](./res/multi_output.gif)
 
-## 🚧 Attention 
-These algorithms aren't powerful enough, for better tracking algorithms look at [SORT](https://github.com/abewley/sort) algorithm and [DEEP-SORT ✨](https://github.com/nwojke/deep_sort) algorithm.
+### 🐾 Sort Tracking
+- ![](./res/sort_output.gif)
 
-
-
-
-## 👩‍🏫 Tracking Explanation
-[Object Tracking in OpenCV](https://ehsangazar.com/object-tracking-with-opencv-fd18ccdd7369)
+### 🌊 Deep Sort Tracking
+- ![](./res/deep_sort_output.gif)
 
 ## 💼 For Contact or Support
 Find me on [LinkedIn](https://www.linkedin.com/in/asmaamirkhan/) and feel free to mail me, [Asmaa](mailto:asmaamirkhan.am@gmail.com) 🦋
