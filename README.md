@@ -1,7 +1,5 @@
 # 🛰 Object Trackers
 Implementation of various methods of object tracking
-> Under Development 🚧
-
 
 ## 👩‍💻 Available Methods
 - 🛰 [OpenCV Trackers](./src/CVTrackers)
