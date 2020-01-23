@@ -21,7 +21,7 @@ def main(args):
     # create output file
     if args.output_path:
         fourcc = cv.VideoWriter_fourcc(*'MP4V')
-        # cap.get(3) = width, cap.get(4) height
+        # cap.get(3) = width, cap.get(4) = height
         output = cv.VideoWriter(args.output_path, fourcc, 20.0,
                                 (int(cap.get(3)), int(cap.get(4))))
 
