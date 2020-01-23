@@ -3,8 +3,8 @@ Implementation of various methods of object tracking
 
 ## 👩‍💻 Available Methods
 - 🛰 [OpenCV Trackers](./src/CVTrackers)
-- 🐾 [Sort Tracking](./src/SortTracking)
-- 🌊 [Deep Sort Tracking](./src/DeepSortTracking)
+- 🐾 [Sort Tracking](./src/SortTracker)
+- 🌊 [Deep Sort Tracking](./src/DeepSortTracker)
  
 > Each folder contains its running details 👩‍🏫
 
