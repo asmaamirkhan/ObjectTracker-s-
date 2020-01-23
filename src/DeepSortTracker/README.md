@@ -6,17 +6,17 @@ Implementation of Deep Sort Tracking with Tensorflow object detection
  
 ## ⚙ 🔩 Usage
 0. Clone this repo
-0. Open [src](/src) folder in CMD
-0. Run:
+1. Open [DeepSortTracker](../DeepSortTracker) folder in CMD
+2. Run:
    
-    `python track_me.py --video_file \path\to\your\video.mp4 --model_path \path\to\your\tf_model.pb --tracker \path\to\your\tracking_tf_model.pb` 
+    `python auto_track.py --video_file \path\to\your\video.mp4 --model_path \path\to\your\tf_model.pb --tracker \path\to\your\tracking_tf_model.pb` 
 
-1. To see running options write:
+3. To see running options write:
    
    `python track_me.py --help`
 
-2. Objects will be detected and tracked 🤗
-3. Press <kbd>Q</kbd> to exit  
+4. Objects will be detected and tracked 🤗
+5. Press <kbd>Q</kbd> to exit  
 
 ## 👀 Example
 - 🕵️‍♀️ Detection model: [SSDLİte + MobileNet](http://download.tensorflow.org/models/object_detection/ssdlite_mobilenet_v2_coco_2018_05_09.tar.gz)
