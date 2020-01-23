@@ -25,7 +25,7 @@ Implementation of Deep Sort Tracking with Tensorflow object detection
   
 ![](../../res/deep_sort_output.gif)
 
-> 🙄 Better results can be obtained when better detection model is used
+> 🙄 Better results can be obtained when more powerful detection model is used
 
 ## 🤹‍♀️ More Arguments
 - `--threshold`
