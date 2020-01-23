@@ -10,14 +10,14 @@ Implementation of various methods of object tracking
 
 ## 👀 Examples
 ### 🛰 CVTrackers
-- ![](./res/single_output.gif)
-- ![](./res/multi_output.gif)
+![](./res/single_output.gif)
+![](./res/multi_output.gif)
 
 ### 🐾 Sort Tracking
-- ![](./res/sort_output.gif)
+![](./res/sort_output.gif)
 
 ### 🌊 Deep Sort Tracking
-- ![](./res/deep_sort_output.gif)
+![](./res/deep_sort_output.gif)
 
 ## 💼 For Contact or Support
 Find me on [LinkedIn](https://www.linkedin.com/in/asmaamirkhan/) and feel free to mail me, [Asmaa](mailto:asmaamirkhan.am@gmail.com) 🦋
