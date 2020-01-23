@@ -2,8 +2,8 @@
 Implementation of object trackers that are provided in OpenCV library
 
 ## 🎈 Available Codes
-0. [Single Object Tracker](/src/track_me.py)
-0. [Multiple Object Tracker](/src/track_us.py)
+0. [Single Object Tracker](./track_me.py)
+0. [Multiple Object Tracker](./track_us.py)
  
 > Make sure that you have OpenCV already installed
 
@@ -16,12 +16,10 @@ Implementation of object trackers that are provided in OpenCV library
 * MEDIANFLOW
 * MOSSE
 
-## 🚧 Attention 
-These algorithms aren't powerful enough, for better tracking algorithms look at [SORT](https://github.com/abewley/sort) algorithm and [DEEP-SORT ✨](https://github.com/nwojke/deep_sort) algorithm.
 
 ## ⚙ 🔩 Usage
 0. Clone this repo
-0. Open [src](/src) folder in CMD
+0. Open [src](../CVTrackers) folder in CMD
 0. Write:
    
     `python track_me.py --video_file C:\your\path\to\your\video.mp4`
