@@ -13,7 +13,7 @@ Implementation of Deep Sort Tracking with Tensorflow object detection
 
 3. To see running options write:
    
-   `python track_me.py --help`
+   `python auto_track.py --help`
 
 4. Objects will be detected and tracked 🤗
 5. Press <kbd>Q</kbd> to exit  
