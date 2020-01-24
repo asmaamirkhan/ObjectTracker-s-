@@ -19,7 +19,7 @@ Implementation of Deep Sort Tracking with Tensorflow object detection
 5. Press <kbd>Q</kbd> to exit  
 
 ## 👀 Example
-- 🕵️‍♀️ Detection model: [SSDLİte + MobileNet](http://download.tensorflow.org/models/object_detection/ssdlite_mobilenet_v2_coco_2018_05_09.tar.gz)
+- 🕵️‍♀️ Detection model: [SSDLite + MobileNet](http://download.tensorflow.org/models/object_detection/ssdlite_mobilenet_v2_coco_2018_05_09.tar.gz)
   - 🧐 See more models at [Tensorflow Object Detection Model Zoo](https://github.com/tensorflow/models/blob/master/research/object_detection/g3doc/detection_model_zoo.md) 
 - 👮‍♀️ Threshold: 0.6
   
